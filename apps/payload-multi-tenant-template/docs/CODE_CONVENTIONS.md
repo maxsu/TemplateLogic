@@ -127,7 +127,7 @@ Prefer a **narrow** barrel (`@/access/collections`) over the widest one (`@/acce
 
 ## Frontend / design system
 
-Public pages under `src/app/(frontend)/` use **`@dappermountain/design-system`** only — not `tamagui` (enforced by ESLint).
+Public pages under `src/app/(frontend)/` use **`@dappermountain/ui`** only — not `tamagui` (enforced by ESLint).
 
 Route segment layout:
 
@@ -141,8 +141,8 @@ Route segment layout:
 
 | Rule | Detail |
 |------|--------|
-| UI imports | `@dappermountain/design-system` (`Stack`, `Button`, `DesignSystemProvider`, …) |
-| New primitives | Add in `packages/design-system`, then import from the package in this app |
+| UI imports | `@dappermountain/ui` (`Button`, `Card`, `Separator`, …) |
+| New primitives | Add in `packages/ui`, then import from the package in this app |
 | i18n | Copy in `src/lang`; runtime: `useAppTranslation` / `getRequestI18n`; keys `custom:*` |
 
 Full guide: **[`docs/DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md)**.

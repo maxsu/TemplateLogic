@@ -23,7 +23,7 @@ Upstream examples often assume `pnpm`, `payload-types.ts`, and MongoDB.
 | Topic | File |
 |-------|------|
 | Layout, config, types, plugins, validation | [reference/PROJECT.md](reference/PROJECT.md) |
-| Frontend design system (`@dappermountain/design-system`) | [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md) |
+| Frontend design system (`@dappermountain/ui`) | [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md) |
 | Postgres, migrations, seeding | [reference/DATABASE.md](reference/DATABASE.md) |
 | Tests (`bun test`, `.env.test`, `bunfig.toml`) | [`docs/TESTING.md`](../../../docs/TESTING.md) |
 | Multi-tenant plugin and access | [reference/MULTI-TENANT.md](reference/MULTI-TENANT.md) |

@@ -92,4 +92,4 @@ Website-template plugins (redirects, search, form-builder, nested-docs) are **no
 
 ## Next.js
 
-`next.config.ts` composes `withPayload` and `withDesignSystem`. Frontend lives under `src/app/(frontend)/` and imports UI from `@dappermountain/design-system` only — see [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md).
+`next.config.ts` composes `withPayload` with `@dappermountain/ui` transpiled. Frontend lives under `src/app/(frontend)/` and imports UI from `@dappermountain/ui` only — see [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md).

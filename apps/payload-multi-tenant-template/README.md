@@ -1,10 +1,10 @@
 # Payload multi-tenant template (app)
 
-**Payload CMS 3** application (hosted on **Next.js** via **`@payloadcms/next`**): admin and REST/GraphQL APIs, optional **MCP** for AI clients ([`docs/MCP.md`](docs/MCP.md)), optional **design-system** frontend (`src/app/(frontend)`), **multi-tenant** plugin, **Lexical** rich text, **SEO** plugin, **Zod**-validated config, and **Drizzle**/Postgres via Payload’s adapter.
+**Payload CMS 3** application (hosted on **Next.js** via **`@payloadcms/next`**): admin and REST/GraphQL APIs, optional **MCP** for AI clients ([`docs/MCP.md`](docs/MCP.md)), optional **Tailwind/shadcn** frontend (`src/app/(frontend)`), **multi-tenant** plugin, **Lexical** rich text, **SEO** plugin, **Zod**-validated config, and **Drizzle**/Postgres via Payload’s adapter.
 
 This package is **`@dappermountain/payload-multi-tenant-template`** inside the monorepo.
 
-- **Shared UI:** workspace package **`@dappermountain/design-system`** (`packages/design-system`)
+- **Shared UI:** workspace package **`@dappermountain/ui`** (`packages/ui`)
 - **Payload stack:** declared in this app’s `package.json` (`payload`, `@payloadcms/*`)
 - **Next / React:** hoisted from the **root** workspace for **`@payloadcms/next`** (install from repo root with `bun install`)
 
@@ -71,7 +71,7 @@ Use **`http://localhost:3000/admin`** unless you changed the port. Ensure Postgr
 
 ## Build & run (production)
 
-**From the repo root (recommended):** Turborepo runs upstream `build` tasks before this app (`dependsOn: ["^build"]` in root `turbo.json`). You do not need to build `packages/design-system` separately first.
+**From the repo root (recommended):** Turborepo runs upstream `build` tasks before this app (`dependsOn: ["^build"]` in root `turbo.json`). You do not need to build `packages/ui` separately first.
 
 ```bash
 bun install
@@ -80,7 +80,7 @@ cd apps/payload-multi-tenant-template
 bun run start
 ```
 
-**From this directory only:** `bun run build` runs **`prebuild`** (`generate:css` in design-system) then the production Payload build (`next build` via `@payloadcms/next`). Use this for an atomic app build when `design-system` is already compiled, or after `cd packages/design-system && bun run build`. For full monorepo ordering, use the root `turbo build` command above.
+**From this directory only:** `bun run build` runs the production Payload build (`next build` via `@payloadcms/next`). For full monorepo ordering, use the root `turbo build` command above. For full monorepo ordering, use the root `turbo build` command above.
 
 See **[`../../README.md` — Building the monorepo](../../README.md#building-the-monorepo)** for the full picture (whole-repo vs per-package builds).
 
@@ -136,7 +136,7 @@ See **[`docs/MCP.md`](docs/MCP.md)** for client examples, security notes, and mi
 ```text
 src/
   app/
-    (frontend)/          # Public design-system shell + pages
+    (frontend)/          # Public Tailwind/shadcn shell + pages
     (payload)/           # Payload admin + API routes
   collections/           # Payload collections (folder per collection)
   access/                # Authorization maps and helpers
@@ -144,7 +144,7 @@ src/
 config/                  # Payload config entry, env parsing (Zod)
 ```
 
-**`next.config.ts`** composes **`withPayload`** and **`withDesignSystem`**, and sets `transpilePackages` for `@dappermountain/design-system`.
+**`next.config.ts`** composes **`withPayload`**, and sets `transpilePackages` for `@dappermountain/ui`.
 
 ---
 
@@ -187,7 +187,7 @@ Adjust `CMD` / orchestration for your host (Kubernetes, Fly, etc.).
 - **MCP** plugin (`@payloadcms/plugin-mcp`) — optional via `MCP_ENABLED`  
 - **Lexical** rich text, **SEO** plugin  
 - **Zod**-validated centralized config  
-- **Design system** frontend via **`@dappermountain/design-system`**  
+- **Tailwind/shadcn** frontend via **`@dappermountain/ui`**  
 - **React Compiler** enabled in `next.config.ts` (Payload + frontend)  
 
 ---

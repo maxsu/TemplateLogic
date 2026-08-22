@@ -1,6 +1,6 @@
 # payload-turbo-bun-template
 
-Monorepo template for **[Payload CMS 3](https://payloadcms.com)** on **[Next.js](https://nextjs.org)** (App Router), using **[Bun](https://bun.sh)** and **[Turborepo](https://turborepo.com)**. It includes a shared **[Tamagui](https://tamagui.dev)** design system, **PostgreSQL** (TimescaleDB image), and **Docker**-based local development.
+Monorepo template for **[Payload CMS 3](https://payloadcms.com)** on **[Next.js](https://nextjs.org)** (App Router), using **[Bun](https://bun.sh)** and **[Turborepo](https://turborepo.com)**. It includes a shared **Tailwind v4 + shadcn/ui** design system, **PostgreSQL** (TimescaleDB image), and **Docker**-based local development.
 
 ---
 
@@ -11,8 +11,8 @@ Monorepo template for **[Payload CMS 3](https://payloadcms.com)** on **[Next.js]
 | Runtime & package manager | **Bun** (`packageManager` pinned in root `package.json`) |
 | Monorepo orchestration | **Turborepo** — `build` depends on upstream packages (`^build`) |
 | CMS | **Payload 3** with Postgres via `@payloadcms/db-postgres`; optional **MCP** (`@payloadcms/plugin-mcp`) |
-| App host | **Next.js App Router** via **`@payloadcms/next`** — Payload admin + API routes in `app/(payload)`, optional Tamagui frontend in `app/(frontend)` |
-| UI (shared) | **`@dappermountain/design-system`** — Tamagui 2 (config v5), `tamagui-build`, `withDesignSystem` Next plugin |
+| App host | **Next.js App Router** via **`@payloadcms/next`** — Payload admin + API routes in `app/(payload)`, optional Tailwind/shadcn frontend in `app/(frontend)` |
+| UI (shared) | **`@dappermountain/ui`** — Tailwind v4 tokens and shadcn/ui components |
 | Database (local) | **TimescaleDB** (`timescale/timescaledb`, PostgreSQL 17) via root `compose.yml` |
 | Containers | **Docker Compose** — app service + DB; helper script `./scripts/up.sh` |
 
@@ -24,7 +24,7 @@ Monorepo template for **[Payload CMS 3](https://payloadcms.com)** on **[Next.js]
 apps/
   payload-multi-tenant-template/    # Payload 3 app (@payloadcms/next; only app today)
 packages/
-  design-system/                    # Tamagui UI, Next plugin, generate:css
+  ui/                               # @dappermountain/ui — tokens + shadcn components
   typescript-config/                # Shared tsconfig fragments (base, react, nextjs)
 .agents/                            # Agent rules + vendored Payload skill (see AGENTS.md)
 docs/
@@ -33,6 +33,7 @@ scripts/
   up.sh, common.sh                  # Docker Compose helpers
   validate-commit-msg.ts          # commit-msg hook + CI
 git-hooks.config.ts                 # bun-git-hooks (installs on bun install)
+.tool-versions                      # asdf + CI Bun pin (must match packageManager)
 compose.yml                         # App + Postgres services
 ```
 
@@ -42,13 +43,13 @@ compose.yml                         # App + Postgres services
 
 | Piece | Role |
 |-------|------|
-| **`apps/payload-multi-tenant-template`** | Main template — Payload config under `config/`, app code under `src/`. Declares **`@dappermountain/design-system`** and Payload packages directly in its `package.json`. |
-| **`packages/design-system`** | Shared Tamagui primitives and Next integration. **`prebuild`** in the app runs `generate:css` here so `public/tamagui.generated.css` stays current. |
+| **`apps/payload-multi-tenant-template`** | Main template — Payload config under `config/`, app code under `src/`. Declares **`@dappermountain/ui`** and Payload packages directly in its `package.json`. |
+| **`packages/ui`** | Shared Tailwind tokens and shadcn/ui primitives used by the app frontend. |
 | **`packages/typescript-config`** | Extended TS configs consumed by workspace packages. |
 | **Root `package.json`** | Turborepo scripts, shared dev tooling (ESLint, Prettier, TypeScript), and **Next/React** versions hoisted for **`@payloadcms/next`**. |
 | **`bun install` (root)** | Installs all workspaces and **commit-msg hooks** via [bun-git-hooks](https://www.npmjs.com/package/bun-git-hooks). |
 
-**Build orchestration:** [`turbo.json`](turbo.json) sets `build` → `dependsOn: ["^build"]`, so upstream workspace packages (e.g. `design-system`) build before dependents. You normally **do not** `cd` into each package and build by hand.
+**Build orchestration:** [`turbo.json`](turbo.json) sets `build` → `dependsOn: ["^build"]`, so upstream workspace packages (e.g. `ui`) build before dependents. You normally **do not** `cd` into each package and build by hand.
 
 ---
 
@@ -66,7 +67,7 @@ compose.yml                         # App + Postgres services
 
 ## Prerequisites
 
-- **[Bun](https://bun.sh)** (match root `packageManager`, e.g. `1.3.14`)
+- **[Bun](https://bun.sh)** `1.3.13` — [`.tool-versions`](.tool-versions) (asdf + CI), root `packageManager`. **Avoid 1.3.14** ([oven-sh/bun#30949](https://github.com/oven-sh/bun/issues/30949) — Lexical cyclic ESM regression under `bun test`; fix expected in 1.4.0 stable).
 - **[Git](https://git-scm.com/)** (commit-msg lint installs on `bun install` via [bun-git-hooks](https://www.npmjs.com/package/bun-git-hooks))
 - For Docker workflow: **[Docker Desktop](https://www.docker.com/products/docker-desktop/)** (or compatible Engine + Compose)
 
@@ -142,7 +143,7 @@ Use this when you run **Payload on the host** (`bun dev`) and only use Docker fo
 
 ## Building the monorepo
 
-**Default (recommended):** run **Turborepo from the repo root** and let it cascade `build` across the graph. You do **not** need to build `design-system` (or other deps) in separate terminals first.
+**Default (recommended):** run **Turborepo from the repo root** and let it cascade `build` across the graph. You do **not** need to build `ui` (or other deps) in separate terminals first.
 
 ```bash
 bun install
@@ -154,28 +155,25 @@ bunx turbo build --filter=@dappermountain/payload-multi-tenant-template...
 bunx turbo build
 ```
 
-The filter suffix **`...`** means “this package **and** its dependencies,” so `@dappermountain/design-system` runs before the app. Turbo caches outputs and skips work that is already up to date.
+The filter suffix **`...`** means “this package **and** its dependencies,” so `@dappermountain/ui` runs before the app. Turbo caches outputs and skips work that is already up to date.
 
-**Development (`bun dev`):** usually **no** prior `turbo build` is required — the Payload dev server (Next.js under the hood) transpiles `@dappermountain/design-system` from source. Production builds compile the design-system package and produce a Next **standalone** deploy artifact for the Payload app.
+**Development (`bun dev`):** usually **no** prior `turbo build` is required — the Payload dev server (Next.js under the hood) transpiles `@dappermountain/ui` from source.
 
 ### Building packages individually (optional)
 
 Use per-package commands only when you want an **atomic** build or to debug one workspace in isolation (Turbo is not involved):
 
 ```bash
-cd packages/design-system
-bun run build          # tamagui-build → dist/
-
-cd packages/design-system
-bun run generate:css   # updates app public/tamagui.generated.css
+cd packages/ui
+bun run lint
 ```
 
 ```bash
 cd apps/payload-multi-tenant-template
-bun run build          # prebuild (generate:css) then Payload production build (next build)
+bun run build
 ```
 
-If you run **`bun run build` only inside the app** without a recent upstream build, ensure `packages/design-system/dist/` exists (either from a prior `turbo build` or a manual `bun run build` in that package). Prefer **`turbo build --filter=...@dappermountain/payload-multi-tenant-template`** from the root so ordering stays correct.
+For full monorepo ordering, prefer **`turbo build --filter=...@dappermountain/payload-multi-tenant-template`** from the root.
 
 ### Production output
 
@@ -189,17 +187,14 @@ Together, **`turbo prune` + Next standalone** keeps production images small — 
 
 ---
 
-## Tamagui & design system
+## Tailwind & shadcn/ui
 
-- **Package:** `packages/design-system`
-- **Compiled output:** `tamagui-build` → `dist/` + `types/` (via `turbo build` or optional `bun run build` in that package)
-- **Production CSS:** `bun run generate:css` writes `apps/payload-multi-tenant-template/public/tamagui.generated.css` (app **`prebuild`** runs this before the production Payload build)
-- **Next integration:** `withDesignSystem` from `@dappermountain/design-system/next-plugin` in `apps/payload-multi-tenant-template/next.config.ts`
-- **App usage:** import primitives from `@dappermountain/design-system`; wrap client trees with **`DesignSystemProvider`** from `@dappermountain/design-system/next` (see `src/app/(frontend)/_components/providers.tsx`)
+- **Package:** `packages/ui`
+- **Styles:** `@dappermountain/ui/globals.css` + shared `tokens.css`
+- **Next integration:** `apps/payload-multi-tenant-template/src/app/(frontend)/layout.tsx` imports the shared CSS once
+- **App usage:** import primitives from `@dappermountain/ui/components/*` and icons from `@dappermountain/ui/icons`
 
 See **[`apps/payload-multi-tenant-template/docs/DESIGN_SYSTEM.md`](apps/payload-multi-tenant-template/docs/DESIGN_SYSTEM.md)** for import rules and ESLint restrictions.
-
-After changing Tamagui config or tokens, run **`bunx turbo build --filter=@dappermountain/design-system`** (or `generate:css` + a manual package build if you prefer working atomically).
 
 ---
 
@@ -244,7 +239,7 @@ Production images use the app **`Dockerfile`** (prune → build → standalone).
 ## Troubleshooting
 
 - **Compose / DB not ready:** wait for the `db` service healthcheck before hitting the app; verify `DATABASE_*` variables match `.env` and `compose.yml`.
-- **Tamagui / frontend errors after DS changes:** run `bun run generate:css` in `packages/design-system`, then rebuild the Payload app.
+- **Frontend/UI errors after shared UI changes:** verify `@dappermountain/ui` exports and rebuild the Payload app.
 - **Port conflicts:** change host ports in `compose.yml` if `3001` or `5442` are taken.
 
 ---

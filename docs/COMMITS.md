@@ -44,7 +44,7 @@ Inspired by [Devmoji](https://github.com/folke/devmoji#devmoji-codes) / [gitmoji
 | `test` | ✅ | Tests, fixtures, test docs |
 | `chore` | 🔧 | Tooling, repo hygiene, misc maintenance |
 | `chore(deps)` | ⬆️ | Dependency upgrades |
-| `style` / UI | 💄 | Look-and-feel, Tamagui/CSS, design-system |
+| `style` / UI | 💄 | Look-and-feel, Tailwind/CSS, shared UI package |
 | `ci` / deploy | 👷 / 🚀 | CI, release, deploy pipelines |
 | `docker` / infra | 🐳 | Compose, Dockerfiles |
 | `i18n` / l10n | 🌐 | Translations, locales |
