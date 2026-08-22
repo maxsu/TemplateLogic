@@ -1,7 +1,18 @@
 'use client'
 
-import { Body, Button, Divider, Label, PageTitle, Row, Stack } from '@dappermountain/design-system'
 import Image from 'next/image'
+
+import { Button } from '@dappermountain/ui/components/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@dappermountain/ui/components/card'
+import { Separator } from '@dappermountain/ui/components/separator'
+import { ArrowUpRight, BookOpen, Building2 } from '@dappermountain/ui/icons'
 
 import { useAppTranslation } from '@/utils/i18n.client'
 
@@ -15,87 +26,70 @@ export function HomePage(props: HomePageProps) {
   const { t } = useAppTranslation()
 
   return (
-    <Stack
-      backgroundColor="$background"
-      flex={1}
-      minHeight="100vh"
-      width="100%"
-      padding="$4"
-      paddingVertical="$8"
-      alignItems="center"
-      justifyContent="center"
-      gap="$6"
-    >
-      <Stack
-        flex={1}
-        width="100%"
-        maxWidth={1024}
-        alignSelf="center"
-        alignItems="center"
-        justifyContent="center"
-        gap="$6"
-      >
-        <Stack
-          padding="$6"
-          borderRadius="$4"
-          width="100%"
-          maxWidth={560}
-          borderWidth={1}
-          borderColor="$borderColor"
-          backgroundColor="$color1"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.12}
-          shadowRadius={8}
-        >
-          <Stack alignItems="center" gap="$4">
-            <Image
-              alt={t('custom:frontend:logoAlt')}
-              height={64}
-              src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-              width={64}
-            />
-            <PageTitle fontFamily="$heading" fontSize="$10" lineHeight="$9" textAlign="center" color="$color12">
-              {userEmail ? t('custom:frontend:welcomeBack') : t('custom:frontend:welcome')}
-            </PageTitle>
-            {userEmail ? (
-              <Body color="$color11" textAlign="center" size="$5">
-                {t('custom:frontend:signedInPrefix')}
-                <Label fontWeight="600">{userEmail}</Label>
-              </Body>
-            ) : (
-              <Body color="$color11" textAlign="center" size="$5">
-                {t('custom:frontend:signedOutBlurb')}
-              </Body>
-            )}
-            <Divider borderColor="$borderColor" />
-            <Row flexWrap="wrap" gap="$3" justifyContent="center" width="100%">
-              <Button
-                size="$4"
-                theme="accent"
-                render={<a />}
-                href={adminHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+    <main className="relative flex min-h-screen flex-1 flex-col items-center justify-center overflow-hidden p-6">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.97_0_0),oklch(1_0_0)_50%)] dark:bg-[radial-gradient(ellipse_at_top,oklch(0.22_0_0),oklch(0.145_0_0)_55%)]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,oklch(0.922_0_0/0.35)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.922_0_0/0.35)_1px,transparent_1px)] bg-size-[3rem_3rem] mask-[radial-gradient(ellipse_at_center,black,transparent_75%)] dark:bg-[linear-gradient(to_right,oklch(1_0_0/0.06)_1px,transparent_1px),linear-gradient(to_bottom,oklch(1_0_0/0.06)_1px,transparent_1px)]" />
+
+      <div className="relative z-10 w-full max-w-md">
+        <Card className="border-border/60 bg-card/95 shadow-xl backdrop-blur-sm">
+          <CardHeader className="items-center space-y-4 pb-2 text-center">
+            <div className="flex size-16 items-center justify-center rounded-2xl border bg-muted/50 p-3 shadow-sm">
+              <Image
+                alt={t('custom:frontend:logoAlt')}
+                className="dark:invert"
+                height={40}
+                src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
+                width={40}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
+                {t('custom:frontend:appName')}
+              </p>
+              <CardTitle className="text-2xl font-semibold tracking-tight">
+                {userEmail ? t('custom:frontend:welcomeBack') : t('custom:frontend:welcome')}
+              </CardTitle>
+              {userEmail ? (
+                <CardDescription className="text-base">
+                  {t('custom:frontend:signedInPrefix')}
+                  <span className="font-medium text-foreground">{userEmail}</span>
+                </CardDescription>
+              ) : (
+                <CardDescription className="text-base leading-relaxed">
+                  {t('custom:frontend:signedOutBlurb')}
+                </CardDescription>
+              )}
+            </div>
+          </CardHeader>
+
+          <CardContent className="px-6">
+            <Separator />
+          </CardContent>
+
+          <CardFooter className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button asChild className="w-full sm:w-auto" size="lg">
+              <a href={adminHref} rel="noopener noreferrer" target="_blank">
+                <Building2 className="size-4" />
                 {t('custom:frontend:openAdmin')}
-              </Button>
-              <Button
-                chromeless
-                size="$4"
-                borderWidth={1}
-                borderColor="$borderColor"
-                render={<a />}
-                href="https://payloadcms.com/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+                <ArrowUpRight className="size-3.5 opacity-70" />
+              </a>
+            </Button>
+            <Button asChild className="w-full sm:w-auto" size="lg" variant="outline">
+              <a href="https://payloadcms.com/docs" rel="noopener noreferrer" target="_blank">
+                <BookOpen className="size-4" />
                 {t('custom:frontend:documentation')}
-              </Button>
-            </Row>
-          </Stack>
-        </Stack>
-      </Stack>
-    </Stack>
+              </a>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          {t('custom:frontend:tagline')}
+        </p>
+      </div>
+    </main>
   )
 }

@@ -1,7 +1,7 @@
 /**
  * Spanish — same keys as `en.ts`, translated values only.
  */
-export default {
+const es = {
   custom: {
     roles: {
       SYSTEM_ADMIN: 'Administrador del sistema',
@@ -11,18 +11,22 @@ export default {
     },
     defaultTenant: 'Espacio predeterminado',
     frontend: {
-      logoAlt: 'Payload',
+      appName: 'Payload Multi-Tenant Template',
+      logoAlt: 'Payload Multi-Tenant Template',
       welcome: 'Bienvenido',
       welcomeBack: 'Bienvenido de nuevo',
       signedInPrefix: 'Sesión iniciada como ',
-      signedOutBlurb: 'Tu nueva base Payload + sistema de diseño está lista.',
+      signedOutBlurb: 'Tu nueva base de Payload + Tailwind está lista.',
       openAdmin: 'Abrir administración',
       documentation: 'Documentación',
       chooseLanguage: 'Elegir idioma',
+      tagline: 'Construido con Payload CMS, Tailwind y shadcn/ui',
     },
     meta: {
-      title: 'Payload',
-      description: 'Payload CMS con el sistema de diseño Dapper Mountain',
+      title: 'Payload Multi-Tenant Template',
+      description: 'Plantilla multiinquilino de Payload CMS con Tailwind y shadcn/ui',
     },
   },
 }
+
+export default es
