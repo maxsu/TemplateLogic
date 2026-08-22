@@ -7,6 +7,7 @@ services:
       args:
         PROJECT: "@dappermountain/payload-multi-tenant-template"
         PROJECT_PATH: "apps/payload-multi-tenant-template"
+        BUN_VERSION: "1.3.13"
         # Raise (e.g. 4096) if `bun install` OOMs; use 0 if your builder forbids swap
         BUILD_SWAP_MB: 2048
     # Install from monorepo root (workspace), then run Next in the app package.
@@ -14,6 +15,10 @@ services:
     command: sh -c 'cd /app && bun install && cd apps/payload-multi-tenant-template && exec bun dev'
     env_file:
       - apps/payload-multi-tenant-template/.env
+    environment:
+      # Schema is synced via migrations run from the host (`bun run db:migrate:run`).
+      # Avoids blocking on Drizzle's interactive push prompt in non-TTY Docker logs.
+      PAYLOAD_DISABLE_DEV_PUSH: "true"
     ports:
       - 3001:3000
     volumes:
