@@ -12,6 +12,9 @@
     "hooks:install": "git-hooks",
     "hooks:uninstall": "git-hooks uninstall"
   },
+  "git-hooks": {
+    "commit-msg": "bun scripts/validate-commit-msg.ts $1"
+  },
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all",
