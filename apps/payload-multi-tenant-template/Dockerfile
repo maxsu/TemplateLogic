@@ -3,7 +3,7 @@ ARG PROJECT_PATH
 
 ARG BUN_VERSION=1.3.13
 
-FROM oven/bun:${BUN_VERSION}-alpine AS base
+FROM docker.io/oven/bun:${BUN_VERSION}-alpine AS base
 WORKDIR /app
 
 # ================= TURBO PRUNE ===================
