@@ -1,7 +1,9 @@
 ARG PROJECT
 ARG PROJECT_PATH
 
-ARG BUN_VERSION=1.3.13
+# Pass at build time from `.tool-versions` (compose / fly deploy / docker build --build-arg).
+# No default — keeps the Bun pin out of this file.
+ARG BUN_VERSION
 
 FROM docker.io/oven/bun:${BUN_VERSION}-alpine AS base
 WORKDIR /app

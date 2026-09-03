@@ -10,6 +10,15 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 export COMPOSE_PROJECT_NAME=payload-turbo-bun-template
 export APPS_DIR="apps"  # Ensure this is correctly defined
 
+# Bun image tag for Docker builds — single source: repo-root `.tool-versions`.
+_SCRIPT_DIR_FOR_BUN="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_ROOT_FOR_BUN="$(cd "${_SCRIPT_DIR_FOR_BUN}/.." && pwd)"
+if [[ -z "${BUN_VERSION:-}" && -f "${_ROOT_FOR_BUN}/.tool-versions" ]]; then
+  BUN_VERSION="$(awk '/^bun / { print $2; exit }' "${_ROOT_FOR_BUN}/.tool-versions")"
+  export BUN_VERSION
+fi
+unset _SCRIPT_DIR_FOR_BUN _ROOT_FOR_BUN
+
 # Get the full path of the directory containing this script
 get_script_dir() {
     echo "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

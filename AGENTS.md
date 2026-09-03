@@ -32,7 +32,7 @@ The app declares **Payload** (`payload`, `@payloadcms/*`) and **`@dappermountain
 
 ## Runtime and commands
 
-- **Package manager**: Bun only (`packageManager` in root `package.json`). See `.agents/rules/bun.mdc`.
+- **Package manager**: Bun only (version in root `.tool-versions`). See `.agents/rules/bun.mdc`.
 - **Install** (from repo root): `bun install` (also installs commit-msg hooks via `bun-git-hooks` — see `git-hooks.config.ts`)
 - **Build app** (with deps): `bunx turbo build --filter=@dappermountain/payload-multi-tenant-template...` from repo root — Turbo cascades `^build`; per-package `bun run build` is only for isolated/atomic work
 - **Docker full stack**: `./scripts/up.sh` (app on host port **3001**)

@@ -79,7 +79,9 @@ Do not manually edit package.json dependencies unless necessary.
 
 ## Version pin
 
-Root `.tool-versions`, `package.json` `packageManager`, and Docker `BUN_VERSION` must stay in sync. **Avoid Bun 1.3.14** — cyclic ESM regression breaks Lexical/Payload under `bun test` ([oven-sh/bun#30949](https://github.com/oven-sh/bun/issues/30949)); use **1.3.13** until a stable release includes the fix (expected in 1.4.0).
+Pin Bun in root [`.tool-versions`](../../.tool-versions) only (asdf + CI via `oven-sh/setup-bun` `bun-version-file`).
+
+Docker does **not** hardcode a version: `scripts/common.sh` exports `BUN_VERSION` from `.tool-versions` for Compose; Fly/CI pass `--build-arg BUN_VERSION=…` into the Dockerfile `ARG`. Do not add a root `packageManager` field — Bun does not need it.
 
 ---
 

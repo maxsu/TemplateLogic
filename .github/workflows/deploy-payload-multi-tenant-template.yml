@@ -23,6 +23,10 @@ jobs:
 
       - name: Deploy Payload Multi-Tenant Template to Fly.io
         run: |
-          flyctl deploy . --config ${{ github.workspace }}//apps/payload-multi-tenant-template/fly.toml --ha=false
+          BUN_VERSION="$(awk '/^bun / { print $2; exit }' .tool-versions)"
+          flyctl deploy . \
+            --config "${{ github.workspace }}/apps/payload-multi-tenant-template/fly.toml" \
+            --build-arg "BUN_VERSION=${BUN_VERSION}" \
+            --ha=false
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

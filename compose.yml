@@ -7,7 +7,8 @@ services:
       args:
         PROJECT: "@dappermountain/payload-multi-tenant-template"
         PROJECT_PATH: "apps/payload-multi-tenant-template"
-        BUN_VERSION: "1.3.13"
+        # Derived from root `.tool-versions` via `scripts/common.sh` / env (`BUN_VERSION`).
+        BUN_VERSION: ${BUN_VERSION:?Set BUN_VERSION from .tool-versions (e.g. source scripts/common.sh)}
         # Raise (e.g. 4096) if `bun install` OOMs; use 0 if your builder forbids swap
         BUILD_SWAP_MB: 2048
     # Install from monorepo root (workspace), then run Next in the app package.

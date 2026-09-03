@@ -8,7 +8,7 @@ Monorepo template for **[Payload CMS 3](https://payloadcms.com)** on **[Next.js]
 
 | Layer | Choice |
 |--------|--------|
-| Runtime & package manager | **Bun** (`packageManager` pinned in root `package.json`) |
+| Runtime & package manager | **Bun** (pinned in [`.tool-versions`](.tool-versions)) |
 | Monorepo orchestration | **Turborepo** — `build` depends on upstream packages (`^build`) |
 | CMS | **Payload 3** with Postgres via `@payloadcms/db-postgres`; optional **MCP** (`@payloadcms/plugin-mcp`) |
 | App host | **Next.js App Router** via **`@payloadcms/next`** — Payload admin + API routes in `app/(payload)`, optional Tailwind/shadcn frontend in `app/(frontend)` |
@@ -33,7 +33,7 @@ scripts/
   up.sh, common.sh                  # Docker Compose helpers
   validate-commit-msg.ts          # commit-msg hook + CI
 git-hooks.config.ts                 # bun-git-hooks (installs on bun install)
-.tool-versions                      # asdf + CI Bun pin (must match packageManager)
+.tool-versions                      # asdf + CI Bun pin (also feeds Docker via scripts/common.sh)
 compose.yml                         # App + Postgres services
 ```
 
@@ -67,7 +67,7 @@ compose.yml                         # App + Postgres services
 
 ## Prerequisites
 
-- **[Bun](https://bun.sh)** `1.3.13` — [`.tool-versions`](.tool-versions) (asdf + CI), root `packageManager`. **Avoid 1.3.14** ([oven-sh/bun#30949](https://github.com/oven-sh/bun/issues/30949) — Lexical cyclic ESM regression under `bun test`; fix expected in 1.4.0 stable).
+- **[Bun](https://bun.sh)** — pin in [`.tool-versions`](.tool-versions) (asdf + CI). Docker / `./scripts/up.sh` reads the same file for the image tag.
 - **[Git](https://git-scm.com/)** (commit-msg lint installs on `bun install` via [bun-git-hooks](https://www.npmjs.com/package/bun-git-hooks))
 - For Docker workflow: **[Docker Desktop](https://www.docker.com/products/docker-desktop/)** (or compatible Engine + Compose)
 
