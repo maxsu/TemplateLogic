@@ -1,3 +1,4 @@
+name: payload-turbo-bun-template
 services:
   app:
     restart: unless-stopped

@@ -1,20 +1,10 @@
 #!/bin/bash
 
-# Creates Docker images, networks, volumes, and containers
+# Navigate to project root
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-# Source the shared utilities and variables from common.sh.
-# Note: Here we're sourcing 'common.sh' relative to the current script's location
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/common.sh"
+[[ -z $BUN_VERSION ]] &&
+    export BUN_VERSION=$(awk '/^bun / { print $2; exit }' .tool-versions)
 
-# Get the script's directory, parent directory, and app name
-ROOT_DIR="$(get_parent_dir "$SCRIPT_DIR")"
-APP_NAME="payload-multi-tenant-template"
-
-echo "Starting $APP_NAME"
-
-# Define Docker Compose file path
-COMPOSE_FILE="$ROOT_DIR/compose.yml"
-
-# Run Docker Compose
-docker compose -f "$COMPOSE_FILE" up -d
+echo "Starting payload-multi-tenant-template"
+docker compose up --detach
